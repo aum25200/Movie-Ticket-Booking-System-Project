@@ -1,0 +1,135 @@
+// Logout function
+        function logout() {
+            localStorage.removeItem('isLoggedIn');  // Remove login session from localStorage
+            window.location.href = 'login.html';    // Redirect to the login page
+        }
+
+          // Show Notifications (Upcoming Movies from TMDB)
+          async function showNotifications() {
+            const response = await fetch(`${BASE_URL}/movie/upcoming?api_key=${API_KEY}&language=en-US&page=1`);
+            const data = await response.json();
+            const upcomingMovies = data.results.slice(0, 5); // Get first 5 upcoming movies
+
+            let message = 'Upcoming Movies:\n';
+            upcomingMovies.forEach(movie => {
+                message += `${movie.title} - Release Date: ${movie.release_date}\n`;
+            });
+
+            alert(message);
+        }
+
+       // Open Support (mockup for demo purposes)
+       function openSupport() {
+            alert('Contact support at support@hollywoodworld.com or call +1 800 123 4567.');
+        }
+
+
+        // Open About (mockup for demo purposes)
+        function openAbout() {
+            alert('Hollywood World is your one-stop solution for booking movie tickets and watching trailers.');
+        }
+
+        const API_KEY = '551e284a6b0e271b3b9727619f791f4f';  // Replace with your TMDb API key
+        const BASE_URL = 'https://api.themoviedb.org/3';
+        const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+        const YOUTUBE_BASE_URL = 'https://www.youtube.com/watch?v='; // YouTube URL base for trailers
+        const movieContainer = document.getElementById('movie-container');
+        let selectedLanguage = 'en-US'; // Default language
+
+        // Function to fetch movies
+        async function fetchMovies(pageNumber) {
+            const API_URL = `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=${selectedLanguage}&page=${pageNumber}`;
+            const response = await fetch(API_URL);
+            const data = await response.json();
+            return data.results;
+        }
+
+        // Fetch and display 200 movies (from 10 pages)
+        async function displayMovies() {
+            movieContainer.innerHTML = ''; // Clear the container
+            let allMovies = [];
+
+            for (let i = 1; i <= 10; i++) {
+                const movies = await fetchMovies(i);
+                allMovies = allMovies.concat(movies);
+            }
+
+            allMovies.slice(0, 200).forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
+
+                const moviePoster = movie.poster_path ? `${IMAGE_BASE_URL}${movie.poster_path}` : 'placeholder.jpg';
+
+                movieCard.innerHTML = `
+                    <img src="${moviePoster}" alt="${movie.title}">
+                    <h3>${movie.title}</h3>
+                    <p>Release Date: ${movie.release_date}</p>
+                    <p>${movie.overview.slice(0, 200)}...</p>
+                    <a href="seat.html?movie=${encodeURIComponent(movie.title)}" class="book-button">Book Now</a>
+                    <button class="trailer-button" onclick="watchTrailer(${movie.id})">Watch Trailer</button>
+                `;
+
+                movieContainer.appendChild(movieCard);
+            });
+        }
+
+        // Function to fetch and display movie trailer
+        async function watchTrailer(movieId) {
+            const API_URL = `${BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}&language=${selectedLanguage}`;
+            const response = await fetch(API_URL);
+            const data = await response.json();
+            const trailers = data.results.filter(video => video.type === 'Trailer' && video.site === 'YouTube');
+
+            if (trailers.length > 0) {
+                const trailerURL = `${YOUTUBE_BASE_URL}${trailers[0].key}`;
+                window.open(trailerURL, '_blank');
+            } else {
+                alert('Trailer not available for this movie.');
+            }
+        }
+
+        // Search function for movies
+        async function searchMovies() {
+            const query = document.getElementById('search-input').value;
+            const API_URL = `${BASE_URL}/search/movie?api_key=${API_KEY}&language=${selectedLanguage}&query=${encodeURIComponent(query)}`;
+            const response = await fetch(API_URL);
+            const data = await response.json();
+            displaySearchResults(data.results);
+        }
+
+        // Function to clear the search input
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            displayMovies(); // Refresh the movie list to show all movies
+        }
+
+        // Display search results
+        function displaySearchResults(movies) {
+            movieContainer.innerHTML = '';
+
+            if (movies.length === 0) {
+                movieContainer.innerHTML = '<p>No movies found.</p>';
+                return;
+            }
+
+            movies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
+
+                const moviePoster = movie.poster_path ? `${IMAGE_BASE_URL}${movie.poster_path}` : 'placeholder.jpg';
+
+                movieCard.innerHTML = `
+                    <img src="${moviePoster}" alt="${movie.title}">
+                    <h3>${movie.title}</h3>
+                    <p>Release Date: ${movie.release_date}</p>
+                    <p>${movie.overview.slice(0, 100)}...</p>
+                    <a href="seat.html?movie=${encodeURIComponent(movie.title)}" class="book-button">Book Now</a>
+                    <button class="trailer-button" onclick="watchTrailer(${movie.id})">Watch Trailer</button>
+                `;
+
+                movieContainer.appendChild(movieCard);
+            });
+        }
+
+        // Initial call to display movies when the page loads
+        displayMovies();

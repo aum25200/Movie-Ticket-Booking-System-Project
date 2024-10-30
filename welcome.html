@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Booking System - Home</title>
+    <style>
+        body {
+            background-image: url('akshar-dave-WYCeSzr7SQ4-unsplash.jpg');
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+            position: relative;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+            z-index: 1;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 2; /* Bring content above the overlay */
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .highlight {
+            font-size: 24px;
+            margin: 10px 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            color: #FFD700; /* Gold color for emphasis */
+            animation: blink 1.5s infinite; /* Blink effect */
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+
+        p {
+            font-size: 20px;
+            margin: 20px 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 10px;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .signup-button {
+            background-color: #28a745;
+        }
+
+        .signup-button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .admin-button {
+            background-color: #dc3545; /* Admin button color */
+        }
+
+        .admin-button:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="overlay"></div>
+    <div class="container">
+        <h1>Welcome to Online Movies</h1>
+        <p>Book tickets for your favorite movies online.</p>
+        <div class="highlight">Please note: Only present-day bookings are available.</div> <!-- Highlighted note -->
+        <a href="login.php" class="button">Login</a>
+        <a href="signup.php" class="button signup-button">Sign Up</a>
+        <a href="adminlogin.html" class="button admin-button">Admin Login</a> <!-- Admin login button -->
+    </div>
+
+</body>
+</html>

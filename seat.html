@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Booking</title>
+    <style>
+        body {
+            background-image: url('akshar-dave-WYCeSzr7SQ4-unsplash (1).jpg');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        select, .button-link {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .seat {
+            padding: 20px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .seat.selected {
+            background-color: rgb(137, 252, 137);
+        }
+        .seat.occupied {
+            background-color: rgb(255, 138, 138);
+            cursor: not-allowed;
+        }
+        .showcase {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .showcase div {
+            text-align: center;
+        }
+        .text {
+            text-align: center;
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        .button-link {
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .button-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Seating Arrangement</h1>
+        <label for="showtime">Select your showtime:</label>
+        <select id="showtime" required>
+            <option value="">Select a showtime</option>
+        </select>
+
+        <div class="showcase">
+            <div>
+                <div class="seat"></div>
+                <small>Available</small>
+            </div>
+            <div>
+                <div class="seat selected"></div>
+                <small>Selected</small>
+            </div>
+            <div>
+                <div class="seat occupied"></div>
+                <small>Occupied</small>
+            </div>
+        </div>
+
+        <div class="seat-grid" id="seat-grid"></div>
+
+        <p class="text">
+            You have selected <span id="count">0</span> seats for a total of Rs <span id="total">0</span>.
+        </p><br>
+        
+        <a href="payment.php" id="proceed-to-payment" class="button-link">Proceed to Payment</a>
+    </div>
+
+    <script>
+        const ticketPrice = 200;
+        let selectedSeats = [];
+
+        function updateSeatSelection() {
+            document.getElementById('count').textContent = selectedSeats.length;
+            document.getElementById('total').textContent = selectedSeats.length * ticketPrice;
+        }
+
+        const seats = ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6'];
+        const seatGrid = document.getElementById('seat-grid');
+
+        // Populate seats
+        seats.forEach(seat => {
+            const seatDiv = document.createElement('div');
+            seatDiv.classList.add('seat');
+            seatDiv.textContent = seat;
+
+            if (Math.random() < 0.3) {
+                seatDiv.classList.add('occupied');
+                seatDiv.textContent = `${seat} (Occupied)`;
+            }
+
+            seatDiv.addEventListener('click', function () {
+                if (!seatDiv.classList.contains('occupied')) {
+                    seatDiv.classList.toggle('selected');
+                    if (seatDiv.classList.contains('selected')) {
+                        selectedSeats.push(seat);
+                    } else {
+                        selectedSeats = selectedSeats.filter(s => s !== seat);
+                    }
+                    updateSeatSelection();
+                }
+            });
+
+            seatGrid.appendChild(seatDiv);
+        });
+
+        // Show time options
+        const showtimeSelect = document.getElementById('showtime');
+        const showtimes = [
+            { time: "09:00", label: "9:00 AM" },
+            { time: "13:00", label: "1:00 PM" },
+            { time: "16:00", label: "4:00 PM" },
+            { time: "20:00", label: "8:00 PM" },
+        ];
+
+        const currentTime = new Date();
+        const currentHour = currentTime.getHours();
+        const currentMinute = currentTime.getMinutes();
+        const currentTimeInMinutes = currentHour * 60 + currentMinute;
+
+        showtimes.forEach(({ time, label }) => {
+            const [hour, minute] = time.split(':').map(Number);
+            const showtimeInMinutes = hour * 60 + minute;
+            if (showtimeInMinutes > currentTimeInMinutes) {
+                const option = document.createElement('option');
+                option.value = time;
+                option.textContent = label;
+                showtimeSelect.appendChild(option);
+            }
+        });
+
+        document.getElementById('proceed-to-payment').addEventListener('click', function (event) {
+            event.preventDefault();
+            const showtime = showtimeSelect.value;
+
+            if (selectedSeats.length === 0) {
+                alert('Please select at least one seat.');
+                return;
+            }
+            if (!showtime) {
+                alert('Please select a showtime.');
+                return;
+            }
+
+            window.location.href = `payment.php?seat=${selectedSeats.join(',')}&total=${selectedSeats.length * ticketPrice}&showtime=${showtime}`;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Home - TMDB API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #070707;
+            color: rgb(247, 247, 247);
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+        .logout-button {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #FF4136;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .logout-button:hover {
+            background-color: #d63629;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: #333;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: rgb(244, 244, 247);
+            text-decoration: none;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .movie-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .movie-card {
+            width: 220px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .movie-card img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .movie-card h3 {
+            margin: 15px 0;
+            font-size: 18px;
+        }
+
+        .book-button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .book-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Movies</h1>
+        <nav>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="#">Movies</a></li>
+                <li><a href="booking.html">Bookings</a></li>
+            </ul>
+            <a href="welcome.html" class="logout-button" onclick="logout(); return false;">Logout</a>
+
+<style>
+    .logout-button {
+        display: inline-block; /* Make it look like a button */
+        padding: 10px 20px;
+        background-color: #f00; /* Red background */
+        color: white;
+        text-decoration: none; /* Remove underline */
+        border-radius: 5px; /* Rounded corners */
+        text-align: center; /* Center text */
+    }
+    .logout-button:hover {
+        background-color: #c00; /* Darker red on hover */
+    }
+</style>
+
+        </nav>
+    </header>
+
+    <main>
+        <div class="movie-container" id="movie-container">
+            <!-- Movie Cards will be populated here -->
+        </div>
+    </main>
+
+    <h2>Top Rated Movies</h2>
+    <div class="movie-container" id="top-rated-movies">
+        <!-- Top Rated Movies will be populated here -->
+    </div>
+
+    <h2>Upcoming Movies</h2>
+    <div class="movie-container" id="upcoming-movies">
+        <!-- Upcoming Movies will be populated here -->
+    </div>
+
+    <script>
+        // Replace with your TMDB API key
+        const apiKey = 'd5bac6114d282fa003dd0ee41f1ad95f';
+        // TMDB API URLs
+        const popularUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=1`;
+        const topRatedUrl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US&page=1`;
+        const upcomingUrl = `https://api.themoviedb.org/3/movie/upcoming?api_key=${apiKey}&language=en-US&page=1`;
+
+        // Fetch and display popular movies
+        async function fetchPopularMovies() {
+            try {
+                const response = await fetch(popularUrl);
+                const data = await response.json();
+                displayMovies(data.results, 'popular-movies');
+            } catch (error) {
+                console.error('Error fetching popular movies:', error);
+            }
+        }
+
+        // Fetch and display top rated movies
+        async function fetchTopRatedMovies() {
+            try {
+                const response = await fetch(topRatedUrl);
+                const data = await response.json();
+                displayMovies(data.results, 'top-rated-movies');
+            } catch (error) {
+                console.error('Error fetching top-rated movies:', error);
+            }
+        }
+
+        // Fetch and display upcoming movies
+        async function fetchUpcomingMovies() {
+            try {
+                const response = await fetch(upcomingUrl);
+                const data = await response.json();
+                displayMovies(data.results, 'upcoming-movies');
+            } catch (error) {
+                console.error('Error fetching upcoming movies:', error);
+            }
+        }
+
+        // Display movies in the specified container
+        function displayMovies(movies, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; // Clear previous content
+
+            movies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
+
+                const moviePoster = movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                    : 'https://via.placeholder.com/220x300?text=No+Image';
+
+                movieCard.innerHTML = `
+                    <img src="${moviePoster}" alt="${movie.title}">
+                    <h3>${movie.title}</h3>
+                    <p>Rating: ${movie.vote_average}</p>
+                    <a href="seat.html?movieId=${movie.id}" class="book-button">Book Now</a>
+                `;
+
+                container.appendChild(movieCard);
+            });
+        }
+
+        // Load all categories of movies when the page is loaded
+        fetchPopularMovies();
+        fetchTopRatedMovies();
+        fetchUpcomingMovies();
+    </script>
+
+</body>
+</html>

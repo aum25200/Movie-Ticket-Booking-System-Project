@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .button {
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            margin: 10px;
+            transition: transform 0.2s;
+            width: 200px; /* Fixed width for uniformity */
+        }
+
+        .signup-button {
+            background-color: #5cb85c;
+        }
+
+        .payment-button {
+            background-color: #007bff;
+        }
+
+        .movie-button {
+            background-color: #dc3545;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button:active {
+            transform: translateY(1px);
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Admin Dashboard</h1>
+        <div class="button-container">
+            <button class="button signup-button" onclick="window.location.href='adminsignup.php'">Users Signup Data</button>
+            <button class="button payment-button" onclick="window.location.href='adminpayment.php'"> Users Payment Data</button>
+            <button class="button movie-button" onclick="window.location.href='adminmoviedata.php'">Movie Data</button>
+        </div>
+    </div>
+</body>
+</html>

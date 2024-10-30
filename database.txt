@@ -1,0 +1,75 @@
+first create database name movie_project in xampp server and in that go in SQL and paste each code and then click on go and it will be created 3 rows will appear for 3 codes after that. 
+
+1. users table (for storing users sign up  data)
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `age` int(11) NOT NULL,
+  `gender` enum('male','female','other') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `users` (`username`, `email`, `password`, `age`, `gender`, `created_at`) VALUES
+('rahul_verma', 'rahul@example.com', 'password@123', 28, 'male', NOW()),
+('priya_sharma', 'priya@example.com', 'password@456', 25, 'female', NOW()),
+('arjun_mishra', 'arjun@example.com', 'password@789', 30, 'male', NOW()),
+('ananya_gupta', 'ananya@example.com', 'password@101', 22, 'female', NOW()),
+('vijay_singh', 'vijay@example.com', 'password@202', 35, 'male', NOW());
+
+
+2.payments table (for storing user payment data)
+
+CREATE TABLE `payments` (
+  `id` int(11) NOT NULL,
+  `full_name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `state` varchar(100) NOT NULL,
+  `zip_code` varchar(10) NOT NULL,
+  `card_name` varchar(100) NOT NULL,
+  `card_number` varchar(16) NOT NULL,
+  `expiry` varchar(5) NOT NULL,
+  `cvv` varchar(4) NOT NULL,
+  `movie_title` varchar(100) NOT NULL,
+  `selected_seats` text NOT NULL,
+  `total_price` decimal(10,2) NOT NULL,
+  `showtime` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+INSERT INTO `payments` (`id`, `full_name`, `email`, `address`, `city`, `state`, `zip_code`, `card_name`, `card_number`, `expiry`, `cvv`, `movie_title`, `selected_seats`, `total_price`, `showtime`) VALUES
+(1, 'Rahul Verma', 'rahul.verma@example.com', '123 Main St', 'Mumbai', 'Maharashtra', '400001', 'Rahul Verma', '4111111111111111', '12/25', '123', 'Movie Title 1', 'A1,A2,A3', 1200.00, '2024-10-25 19:00:00'),
+(2, 'Priya Sharma', 'priya.sharma@example.com', '456 Elm St', 'Pune', 'Maharashtra', '411001', 'Priya Sharma', '5111111111111111', '01/26', '456', 'Movie Title 2', 'B1,B2', 800.00, '2024-10-25 21:00:00'),
+(3, 'Arjun Mishra', 'arjun.mishra@example.com', '789 Oak St', 'Nagpur', 'Maharashtra', '440001', 'Arjun Mishra', '6111111111111111', '11/24', '789', 'Movie Title 3', 'C1,C2,C3,C4', 1500.00, '2024-10-25 18:30:00'),
+(4, 'Ananya Gupta', 'ananya.gupta@example.com', '321 Pine St', 'Nashik', 'Maharashtra', '422001', 'Ananya Gupta', '7111111111111111', '08/27', '321', 'Movie Title 4', 'D1', 500.00, '2024-10-25 20:00:00'),
+(5, 'Vijay Singh', 'vijay.singh@example.com', '654 Maple St', 'Aurangabad', 'Maharashtra', '431001', 'Vijay Singh', '8111111111111111', '05/25', '654', 'Movie Title 5', 'E1,E2', 1000.00, '2024-10-25 19:30:00');
+
+
+
+3. movies (for storing movie data)
+
+CREATE TABLE `movies` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `genre` varchar(100) DEFAULT NULL,
+  `duration` int(11) DEFAULT NULL,
+  `rating` decimal(2,1) DEFAULT NULL,
+  `release_date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `movies` (`id`, `title`, `genre`, `duration`, `rating`, `release_date`) VALUES
+(1, 'Inception', 'Sci-Fi', 148, 8.8, '2010-07-16'),
+(2, 'The Dark Knight', 'Action', 152, 9.0, '2008-07-18'),
+(3, 'Interstellar', 'Sci-Fi', 169, 8.6, '2014-11-07'),
+(4, 'The Matrix', 'Action', 136, 8.7, '1999-03-31'),
+(7, 'The Shawshank Redemption', 'Drama', 142, 9.3, '1994-09-23'),
+(8, 'The Godfather', 'Crime', 175, 9.2, '1972-03-24'),
+(9, 'Dharmaveer 2', 'Politics', 240, 9.0, NULL),
+(11, 'Dharmaveer 3', 'Poltitcs', 440, 9.9, NULL);
+
+
+
